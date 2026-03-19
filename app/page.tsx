@@ -1,9 +1,33 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      setIsDarkMode(true);
+      document.documentElement.classList.add('dark');
+    } else {
+      setIsDarkMode(false);
+      document.documentElement.classList.remove('dark');
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    const newMode = !isDarkMode;
+    setIsDarkMode(newMode);
+    if (newMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.theme = 'dark';
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.theme = 'light';
+    }
+  };
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -57,24 +81,38 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-neutral-900 font-sans selection:bg-yellow-400 selection:text-black">
+    <div className="min-h-screen bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 font-sans selection:bg-yellow-400 selection:text-black transition-colors duration-300">
       {/* Navbar */}
-      <header className="w-full z-50 bg-neutral-50 sticky top-0">
+      <header className="w-full z-50 bg-neutral-50 dark:bg-neutral-900 border-b border-transparent dark:border-neutral-800 sticky top-0 transition-colors duration-300">
         <div className="w-full px-4 md:px-8 h-16 flex items-center justify-between md:justify-start">
-          <img src="/icon.jpg" alt="IronFit Logo" className="h-10 w-auto" />
+          <img src="/icon.jpg" alt="IronFit Logo" className="h-10 w-auto rounded-full" />
           
           {/* Desktop Nav */}
           <nav className="hidden md:flex gap-8 ml-auto mr-8 items-center">
-            <a href="#hero" className="text-neutral-500 hover:text-black transition-colors text-sm font-bold tracking-wide uppercase">Home</a>
-            <a href="#about" className="text-neutral-500 hover:text-black transition-colors text-sm font-bold tracking-wide uppercase">About</a>
-            <a href="#features" className="text-neutral-500 hover:text-black transition-colors text-sm font-bold tracking-wide uppercase">Classes</a>
-            <a href="#contact" className="text-neutral-500 hover:text-black transition-colors text-sm font-bold tracking-wide uppercase">Contact</a>
+            <a href="#hero" className="text-neutral-500 hover:text-black dark:text-neutral-400 dark:hover:text-white transition-colors text-sm font-bold tracking-wide uppercase">Home</a>
+            <a href="#about" className="text-neutral-500 hover:text-black dark:text-neutral-400 dark:hover:text-white transition-colors text-sm font-bold tracking-wide uppercase">About</a>
+            <a href="#features" className="text-neutral-500 hover:text-black dark:text-neutral-400 dark:hover:text-white transition-colors text-sm font-bold tracking-wide uppercase">Classes</a>
+            <a href="#contact" className="text-neutral-500 hover:text-black dark:text-neutral-400 dark:hover:text-white transition-colors text-sm font-bold tracking-wide uppercase">Contact</a>
           </nav>
-          <a href="#contact" className="hidden md:inline-block bg-yellow-400 hover:bg-yellow-500 text-black px-5 py-2 rounded-md font-bold transition-all text-sm uppercase tracking-wide shadow-sm">Join Now</a>
+
+          <div className="flex items-center gap-4 ml-auto md:ml-0">
+             <button 
+              onClick={toggleDarkMode} 
+              className="p-2 text-neutral-500 hover:text-black dark:text-neutral-400 dark:hover:text-white transition-colors"
+              aria-label="Toggle Dark Mode"
+            >
+              {isDarkMode ? (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              ) : (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              )}
+            </button>
+            <a href="#contact" className="hidden md:inline-block bg-yellow-400 hover:bg-yellow-500 text-black px-5 py-2 rounded-md font-bold transition-all text-sm uppercase tracking-wide shadow-sm">Join Now</a>
+          </div>
 
           {/* Mobile Menu Button */}
           <button 
-            className="md:hidden ml-auto p-2 text-neutral-900"
+            className="md:hidden ml-4 p-2 text-neutral-900 dark:text-white"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -88,29 +126,29 @@ export default function Home() {
 
         {/* Mobile Nav */}
         {isMenuOpen && (
-          <div className="md:hidden bg-neutral-50 border-t border-neutral-200 px-4 py-6 absolute w-full left-0 top-16 shadow-lg flex flex-col gap-4 z-50">
-            <a href="#hero" className="text-neutral-600 hover:text-black font-bold uppercase tracking-wide px-2 py-1" onClick={() => setIsMenuOpen(false)}>Home</a>
-            <a href="#about" className="text-neutral-600 hover:text-black font-bold uppercase tracking-wide px-2 py-1" onClick={() => setIsMenuOpen(false)}>About</a>
-            <a href="#features" className="text-neutral-600 hover:text-black font-bold uppercase tracking-wide px-2 py-1" onClick={() => setIsMenuOpen(false)}>Classes</a>
-            <a href="#contact" className="text-neutral-600 hover:text-black font-bold uppercase tracking-wide px-2 py-1" onClick={() => setIsMenuOpen(false)}>Contact</a>
+          <div className="md:hidden bg-neutral-50 dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800 px-4 py-6 absolute w-full left-0 top-16 shadow-lg flex flex-col gap-4 z-50">
+            <a href="#hero" className="text-neutral-600 dark:text-neutral-300 hover:text-black dark:hover:text-white font-bold uppercase tracking-wide px-2 py-1" onClick={() => setIsMenuOpen(false)}>Home</a>
+            <a href="#about" className="text-neutral-600 dark:text-neutral-300 hover:text-black dark:hover:text-white font-bold uppercase tracking-wide px-2 py-1" onClick={() => setIsMenuOpen(false)}>About</a>
+            <a href="#features" className="text-neutral-600 dark:text-neutral-300 hover:text-black dark:hover:text-white font-bold uppercase tracking-wide px-2 py-1" onClick={() => setIsMenuOpen(false)}>Classes</a>
+            <a href="#contact" className="text-neutral-600 dark:text-neutral-300 hover:text-black dark:hover:text-white font-bold uppercase tracking-wide px-2 py-1" onClick={() => setIsMenuOpen(false)}>Contact</a>
             <a href="#contact" className="bg-yellow-400 hover:bg-yellow-500 text-center py-3 rounded-md font-bold uppercase tracking-wide text-black shadow-sm mt-2" onClick={() => setIsMenuOpen(false)}>Join Now</a>
           </div>
         )}
       </header>
 
       {/* Hero Section */}
-      <section id="hero" className="relative min-h-screen flex items-center overflow-hidden border-b border-neutral-200 bg-neutral-50 pt-16">
+      <section id="hero" className="relative min-h-screen flex items-center overflow-hidden border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 pt-16 transition-colors duration-300">
         <div className="w-full px-4 md:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="flex flex-col items-start text-left z-10">
-            <h1 className="text-5xl md:text-7xl font-normal mb-6 uppercase tracking-tighter leading-[1.05] text-black">
+            <h1 className="text-5xl md:text-7xl font-normal mb-6 uppercase tracking-tighter leading-[1.05] text-black dark:text-white transition-colors">
               Build your <br className="hidden md:block"/><span className="text-yellow-500">perfect body</span>
             </h1>
-            <p className="max-w-xl text-lg md:text-xl text-neutral-500 mb-10 font-normal leading-relaxed">
+            <p className="max-w-xl text-lg md:text-xl text-neutral-500 dark:text-neutral-400 mb-10 font-normal leading-relaxed transition-colors">
               Join the ultimate fitness destination. State-of-the-art equipment, elite trainers, and a community that pushes you to be your best self.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
               <a href="#contact" className="bg-yellow-400 hover:bg-yellow-500 text-black px-8 py-3.5 rounded-md font-bold text-lg transition-all text-center uppercase tracking-wide shadow-sm">Start Your Journey</a>
-              <a href="#features" className="bg-white border border-neutral-200 hover:bg-neutral-50 text-black px-8 py-3.5 rounded-md font-bold text-lg transition-all text-center uppercase tracking-wide shadow-sm">Explore Classes</a>
+              <a href="#features" className="bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 text-black dark:text-white px-8 py-3.5 rounded-md font-bold text-lg transition-all text-center uppercase tracking-wide shadow-sm">Explore Classes</a>
             </div>
           </div>
           
@@ -126,26 +164,26 @@ export default function Home() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-24 bg-white border-b border-neutral-200">
+      <section id="about" className="py-24 bg-white dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-800 transition-colors duration-300">
         <div className="w-full px-4 md:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-neutral-50 rounded-xl p-6 border border-neutral-200 shadow-sm">
+                <div className="bg-neutral-50 dark:bg-neutral-900 rounded-xl p-6 border border-neutral-200 dark:border-neutral-800 shadow-sm transition-colors">
                   <div className="text-yellow-500 mb-4"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
-                  <h3 className="text-4xl font-black text-black mb-1 tracking-tighter">10+</h3>
-                  <p className="text-neutral-500 text-sm font-semibold uppercase tracking-wide">Years Exp.</p>
+                  <h3 className="text-4xl font-black text-black dark:text-white mb-1 tracking-tighter">10+</h3>
+                  <p className="text-neutral-500 dark:text-neutral-400 text-sm font-semibold uppercase tracking-wide">Years Exp.</p>
                 </div>
-                <div className="bg-neutral-50 rounded-xl p-6 border border-neutral-200 shadow-sm">
+                <div className="bg-neutral-50 dark:bg-neutral-900 rounded-xl p-6 border border-neutral-200 dark:border-neutral-800 shadow-sm transition-colors">
                   <div className="text-yellow-500 mb-4"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-                  <h3 className="text-4xl font-black text-black mb-1 tracking-tighter">5K+</h3>
-                  <p className="text-neutral-500 text-sm font-semibold uppercase tracking-wide">Members</p>
+                  <h3 className="text-4xl font-black text-black dark:text-white mb-1 tracking-tighter">5K+</h3>
+                  <p className="text-neutral-500 dark:text-neutral-400 text-sm font-semibold uppercase tracking-wide">Members</p>
                 </div>
               </div>
             </div>
             <div>
-              <h2 className="text-3xl md:text-5xl font-black text-black mb-6 uppercase tracking-tighter">Transform your life with our expertise</h2>
-              <p className="text-neutral-500 mb-8 text-lg font-normal leading-relaxed">
+              <h2 className="text-3xl md:text-5xl font-black text-black dark:text-white mb-6 uppercase tracking-tighter transition-colors">Transform your life with our expertise</h2>
+              <p className="text-neutral-500 dark:text-neutral-400 mb-8 text-lg font-normal leading-relaxed transition-colors">
                 At IRONFIT, we believe fitness is not a hobby; it's a way of life. Founded in 2013, our facility has grown into a premier destination for those serious about their physical and mental well-being.
               </p>
               <ul className="space-y-4 mb-8">
@@ -156,14 +194,14 @@ export default function Home() {
                   'Community Driven Environment'
                 ].map((item, i) => (
                   <li key={i} className="flex items-center gap-3">
-                    <div className="bg-yellow-100 p-1 rounded-full text-yellow-600">
+                    <div className="bg-yellow-100 dark:bg-yellow-900/30 p-1 rounded-full text-yellow-600 dark:text-yellow-400">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
                     </div>
-                    <span className="text-neutral-800 font-semibold">{item}</span>
+                    <span className="text-neutral-800 dark:text-neutral-200 font-semibold">{item}</span>
                   </li>
                 ))}
               </ul>
-              <a href="#contact" className="text-black font-bold inline-flex items-center gap-2 group uppercase tracking-wide hover:text-yellow-500 transition-colors">
+              <a href="#contact" className="text-black dark:text-white font-bold inline-flex items-center gap-2 group uppercase tracking-wide hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">
                 Learn More About Us
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="group-hover:translate-x-1 transition-transform"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </a>
@@ -173,11 +211,11 @@ export default function Home() {
       </section>
 
       {/* Features / Services Section */}
-      <section id="features" className="py-24 bg-neutral-50 border-b border-neutral-200">
+      <section id="features" className="py-24 bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 transition-colors duration-300">
         <div className="w-full px-4 md:px-8">
           <div className="flex flex-col items-center text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-black text-black uppercase tracking-tighter mb-4">Everything you need</h2>
-            <p className="text-neutral-500 max-w-2xl font-normal text-lg">Explore our wide range of fitness classes and programs tailored to help you reach your specific goals.</p>
+            <h2 className="text-3xl md:text-5xl font-black text-black dark:text-white uppercase tracking-tighter mb-4 transition-colors">Everything you need</h2>
+            <p className="text-neutral-500 dark:text-neutral-400 max-w-2xl font-normal text-lg transition-colors">Explore our wide range of fitness classes and programs tailored to help you reach your specific goals.</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -189,14 +227,14 @@ export default function Home() {
               { title: 'Personal Training', desc: 'Get 1-on-1 guidance from elite coaches who create customized plans for your goals.', icon: <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm14 14v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/> },
               { title: 'Nutrition Plans', desc: 'Fuel your progress with expert-crafted meal plans designed for recovery and growth.', icon: <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/> },
             ].map((feature, i) => (
-              <div key={i} className="bg-white border border-neutral-200 p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow group">
-                <div className="bg-neutral-50 border border-neutral-100 w-12 h-12 rounded-lg flex items-center justify-center mb-6 text-black group-hover:bg-yellow-400 group-hover:border-yellow-400 transition-colors">
+              <div key={i} className="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 p-8 rounded-xl shadow-sm hover:shadow-md transition-all group">
+                <div className="bg-neutral-50 dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 w-12 h-12 rounded-lg flex items-center justify-center mb-6 text-black dark:text-white group-hover:bg-yellow-400 group-hover:border-yellow-400 group-hover:text-black transition-colors">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     {feature.icon}
                   </svg>
                 </div>
-                <h3 className="text-xl font-black text-black mb-2 uppercase tracking-tight">{feature.title}</h3>
-                <p className="text-neutral-500 font-normal leading-relaxed text-sm">{feature.desc}</p>
+                <h3 className="text-xl font-black text-black dark:text-white mb-2 uppercase tracking-tight transition-colors">{feature.title}</h3>
+                <p className="text-neutral-500 dark:text-neutral-400 font-normal leading-relaxed text-sm transition-colors">{feature.desc}</p>
               </div>
             ))}
           </div>
@@ -204,98 +242,98 @@ export default function Home() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-24 bg-white relative">
-        <div className="relative w-full px-4 md:px-8">
+      <section id="contact" className="py-24 bg-white dark:bg-neutral-950 px-4 md:px-8 relative transition-colors duration-300">
+        <div className="relative w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             <div>
-              <h2 className="text-3xl md:text-5xl font-black text-black mb-6 uppercase tracking-tighter">Ready to start?</h2>
-              <p className="text-neutral-500 mb-8 font-normal text-lg">
+              <h2 className="text-3xl md:text-5xl font-black text-black dark:text-white mb-6 uppercase tracking-tighter transition-colors">Ready to start?</h2>
+              <p className="text-neutral-500 dark:text-neutral-400 mb-8 font-normal text-lg transition-colors">
                 Drop us a message or visit our facility. Our team is ready to help you begin your transformation journey today.
               </p>
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
-                  <div className="bg-neutral-50 p-3 rounded-lg border border-neutral-200 text-black shadow-sm">
+                  <div className="bg-neutral-50 dark:bg-neutral-900 p-3 rounded-lg border border-neutral-200 dark:border-neutral-800 text-black dark:text-white shadow-sm transition-colors">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                   </div>
                   <div>
-                    <h4 className="font-bold text-black mb-1 uppercase tracking-tight text-sm">Location</h4>
-                    <p className="text-neutral-500 font-normal text-sm">123 Muscle Ave, Fitness City, FC 90210</p>
+                    <h4 className="font-bold text-black dark:text-white mb-1 uppercase tracking-tight text-sm transition-colors">Location</h4>
+                    <p className="text-neutral-500 dark:text-neutral-400 font-normal text-sm transition-colors">123 Muscle Ave, Fitness City, FC 90210</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <div className="bg-neutral-50 p-3 rounded-lg border border-neutral-200 text-black shadow-sm">
+                  <div className="bg-neutral-50 dark:bg-neutral-900 p-3 rounded-lg border border-neutral-200 dark:border-neutral-800 text-black dark:text-white shadow-sm transition-colors">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                   </div>
                   <div>
-                    <h4 className="font-bold text-black mb-1 uppercase tracking-tight text-sm">Phone</h4>
-                    <p className="text-neutral-500 font-normal text-sm">+1 (555) 123-4567</p>
+                    <h4 className="font-bold text-black dark:text-white mb-1 uppercase tracking-tight text-sm transition-colors">Phone</h4>
+                    <p className="text-neutral-500 dark:text-neutral-400 font-normal text-sm transition-colors">+1 (555) 123-4567</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <div className="bg-neutral-50 p-3 rounded-lg border border-neutral-200 text-black shadow-sm">
+                  <div className="bg-neutral-50 dark:bg-neutral-900 p-3 rounded-lg border border-neutral-200 dark:border-neutral-800 text-black dark:text-white shadow-sm transition-colors">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                   </div>
                   <div>
-                    <h4 className="font-bold text-black mb-1 uppercase tracking-tight text-sm">Email</h4>
-                    <p className="text-neutral-500 font-normal text-sm">hello@ironfit.com</p>
+                    <h4 className="font-bold text-black dark:text-white mb-1 uppercase tracking-tight text-sm transition-colors">Email</h4>
+                    <p className="text-neutral-500 dark:text-neutral-400 font-normal text-sm transition-colors">hello@ironfit.com</p>
                   </div>
                 </div>
               </div>
             </div>
             
-            <div className="bg-white rounded-xl p-6 md:p-8 border border-neutral-200 shadow-sm">
+            <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 md:p-8 border border-neutral-200 dark:border-neutral-800 shadow-sm transition-colors">
               <form onSubmit={handleSubmit} className="space-y-4">
                 {submitSuccess && (
-                  <div className="bg-green-50 text-green-700 p-4 rounded-md border border-green-200 text-sm font-medium">
+                  <div className="bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 p-4 rounded-md border border-green-200 dark:border-green-800 text-sm font-medium">
                     Message sent successfully! We'll get back to you soon.
                   </div>
                 )}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-black">First Name *</label>
+                    <label className="text-sm font-semibold text-black dark:text-neutral-200">First Name *</label>
                     <input 
                       type="text" 
                       name="firstName"
                       value={formData.firstName}
                       onChange={handleChange}
-                      className={`w-full bg-white border ${errors.firstName ? 'border-red-500' : 'border-neutral-300'} rounded-md px-3 py-2 text-sm text-black focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors placeholder:text-neutral-400`} 
+                      className={`w-full bg-white dark:bg-neutral-800 border ${errors.firstName ? 'border-red-500' : 'border-neutral-300 dark:border-neutral-700'} rounded-md px-3 py-2 text-sm text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors placeholder:text-neutral-400`} 
                       placeholder="John" 
                     />
                     {errors.firstName && <p className="text-red-500 text-xs">{errors.firstName}</p>}
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-black">Last Name *</label>
+                    <label className="text-sm font-semibold text-black dark:text-neutral-200">Last Name *</label>
                     <input 
                       type="text" 
                       name="lastName"
                       value={formData.lastName}
                       onChange={handleChange}
-                      className={`w-full bg-white border ${errors.lastName ? 'border-red-500' : 'border-neutral-300'} rounded-md px-3 py-2 text-sm text-black focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors placeholder:text-neutral-400`} 
+                      className={`w-full bg-white dark:bg-neutral-800 border ${errors.lastName ? 'border-red-500' : 'border-neutral-300 dark:border-neutral-700'} rounded-md px-3 py-2 text-sm text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors placeholder:text-neutral-400`} 
                       placeholder="Doe" 
                     />
                     {errors.lastName && <p className="text-red-500 text-xs">{errors.lastName}</p>}
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-black">Email Address *</label>
+                  <label className="text-sm font-semibold text-black dark:text-neutral-200">Email Address *</label>
                   <input 
                     type="email" 
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className={`w-full bg-white border ${errors.email ? 'border-red-500' : 'border-neutral-300'} rounded-md px-3 py-2 text-sm text-black focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors placeholder:text-neutral-400`} 
+                    className={`w-full bg-white dark:bg-neutral-800 border ${errors.email ? 'border-red-500' : 'border-neutral-300 dark:border-neutral-700'} rounded-md px-3 py-2 text-sm text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors placeholder:text-neutral-400`} 
                     placeholder="john@example.com" 
                   />
                   {errors.email && <p className="text-red-500 text-xs">{errors.email}</p>}
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-black">Message *</label>
+                  <label className="text-sm font-semibold text-black dark:text-neutral-200">Message *</label>
                   <textarea 
                     rows={4} 
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
-                    className={`w-full bg-white border ${errors.message ? 'border-red-500' : 'border-neutral-300'} rounded-md px-3 py-2 text-sm text-black focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors resize-none placeholder:text-neutral-400`} 
+                    className={`w-full bg-white dark:bg-neutral-800 border ${errors.message ? 'border-red-500' : 'border-neutral-300 dark:border-neutral-700'} rounded-md px-3 py-2 text-sm text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors resize-none placeholder:text-neutral-400`} 
                     placeholder="How can we help you?"
                   ></textarea>
                   {errors.message && <p className="text-red-500 text-xs">{errors.message}</p>}
@@ -313,10 +351,10 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 bg-white border-t border-neutral-200 text-center">
+      <footer className="py-8 bg-white dark:bg-neutral-950 border-t border-neutral-200 dark:border-neutral-800 text-center transition-colors duration-300">
         <div className="w-full px-4">
-          <div className="text-xl font-black text-black tracking-tighter mb-2">IRON<span className="text-yellow-500">FIT</span></div>
-          <p className="text-neutral-500 text-xs font-medium">© {new Date().getFullYear()} IronFit Fitness. All rights reserved.</p>
+          <div className="text-xl font-black text-black dark:text-white tracking-tighter mb-2 transition-colors">IRON<span className="text-yellow-500">FIT</span></div>
+          <p className="text-neutral-500 dark:text-neutral-400 text-xs font-medium transition-colors">© {new Date().getFullYear()} IronFit Fitness. All rights reserved.</p>
         </div>
       </footer>
     </div>
