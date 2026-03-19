@@ -87,11 +87,25 @@ export default function Home() {
     setSubmitSuccess(false);
 
     if (validate()) {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      setSubmitSuccess(true);
-      setFormData({ firstName: '', lastName: '', email: '', message: '' });
-      setTimeout(() => setSubmitSuccess(false), 5000);
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+          setSubmitSuccess(true);
+          setFormData({ firstName: '', lastName: '', email: '', message: '' });
+          setTimeout(() => setSubmitSuccess(false), 5000);
+        } else {
+          console.error('Submission failed');
+        }
+      } catch (error) {
+        console.error('Error submitting form:', error);
+      }
     }
     setIsSubmitting(false);
   };
