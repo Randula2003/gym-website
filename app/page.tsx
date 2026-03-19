@@ -1,7 +1,9 @@
 "use client";
 import React, { useState } from 'react';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 export default function Home() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -57,35 +59,68 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white text-neutral-900 font-sans selection:bg-yellow-400 selection:text-black">
       {/* Navbar */}
-      <header className="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-neutral-200">
-        <div className="w-full px-4 md:px-8 h-16 flex items-center justify-between">
-          <div className="text-2xl font-black text-black tracking-tighter">IRON<span className="text-yellow-500">FIT</span></div>
-          <nav className="hidden md:flex gap-8">
+      <header className="w-full z-50 bg-neutral-50 sticky top-0">
+        <div className="w-full px-4 md:px-8 h-16 flex items-center justify-between md:justify-start">
+          <img src="/icon.jpg" alt="IronFit Logo" className="h-10 w-auto" />
+          
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex gap-8 ml-auto mr-8 items-center">
             <a href="#hero" className="text-neutral-500 hover:text-black transition-colors text-sm font-bold tracking-wide uppercase">Home</a>
             <a href="#about" className="text-neutral-500 hover:text-black transition-colors text-sm font-bold tracking-wide uppercase">About</a>
             <a href="#features" className="text-neutral-500 hover:text-black transition-colors text-sm font-bold tracking-wide uppercase">Classes</a>
             <a href="#contact" className="text-neutral-500 hover:text-black transition-colors text-sm font-bold tracking-wide uppercase">Contact</a>
           </nav>
-          <a href="#contact" className="bg-yellow-400 hover:bg-yellow-500 text-black px-5 py-2 rounded-md font-bold transition-all text-sm uppercase tracking-wide shadow-sm">Join Now</a>
+          <a href="#contact" className="hidden md:inline-block bg-yellow-400 hover:bg-yellow-500 text-black px-5 py-2 rounded-md font-bold transition-all text-sm uppercase tracking-wide shadow-sm">Join Now</a>
+
+          {/* Mobile Menu Button */}
+          <button 
+            className="md:hidden ml-auto p-2 text-neutral-900"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            ) : (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            )}
+          </button>
         </div>
+
+        {/* Mobile Nav */}
+        {isMenuOpen && (
+          <div className="md:hidden bg-neutral-50 border-t border-neutral-200 px-4 py-6 absolute w-full left-0 top-16 shadow-lg flex flex-col gap-4 z-50">
+            <a href="#hero" className="text-neutral-600 hover:text-black font-bold uppercase tracking-wide px-2 py-1" onClick={() => setIsMenuOpen(false)}>Home</a>
+            <a href="#about" className="text-neutral-600 hover:text-black font-bold uppercase tracking-wide px-2 py-1" onClick={() => setIsMenuOpen(false)}>About</a>
+            <a href="#features" className="text-neutral-600 hover:text-black font-bold uppercase tracking-wide px-2 py-1" onClick={() => setIsMenuOpen(false)}>Classes</a>
+            <a href="#contact" className="text-neutral-600 hover:text-black font-bold uppercase tracking-wide px-2 py-1" onClick={() => setIsMenuOpen(false)}>Contact</a>
+            <a href="#contact" className="bg-yellow-400 hover:bg-yellow-500 text-center py-3 rounded-md font-bold uppercase tracking-wide text-black shadow-sm mt-2" onClick={() => setIsMenuOpen(false)}>Join Now</a>
+          </div>
+        )}
       </header>
 
       {/* Hero Section */}
-      <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden border-b border-neutral-200 bg-neutral-50 pt-16">
-        
-        <div className="relative w-full px-4 md:px-8 flex flex-col items-center text-center">
-          <div className="inline-flex items-center rounded-full border border-neutral-200 bg-white px-3 py-1 text-xs font-semibold text-neutral-600 mb-8 uppercase tracking-widest shadow-sm">
-            Push Your Limits
+      <section id="hero" className="relative min-h-screen flex items-center overflow-hidden border-b border-neutral-200 bg-neutral-50 pt-16">
+        <div className="w-full px-4 md:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="flex flex-col items-start text-left z-10">
+            <h1 className="text-5xl md:text-7xl font-normal mb-6 uppercase tracking-tighter leading-[1.05] text-black">
+              Build your <br className="hidden md:block"/><span className="text-yellow-500">perfect body</span>
+            </h1>
+            <p className="max-w-xl text-lg md:text-xl text-neutral-500 mb-10 font-normal leading-relaxed">
+              Join the ultimate fitness destination. State-of-the-art equipment, elite trainers, and a community that pushes you to be your best self.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+              <a href="#contact" className="bg-yellow-400 hover:bg-yellow-500 text-black px-8 py-3.5 rounded-md font-bold text-lg transition-all text-center uppercase tracking-wide shadow-sm">Start Your Journey</a>
+              <a href="#features" className="bg-white border border-neutral-200 hover:bg-neutral-50 text-black px-8 py-3.5 rounded-md font-bold text-lg transition-all text-center uppercase tracking-wide shadow-sm">Explore Classes</a>
+            </div>
           </div>
-          <h1 className="text-5xl md:text-7xl font-black mb-6 uppercase tracking-tighter leading-[1.05] text-black">
-            Build your <br className="hidden md:block"/><span className="text-yellow-500">perfect body</span>
-          </h1>
-          <p className="max-w-2xl text-lg md:text-xl text-neutral-500 mb-10 font-normal leading-relaxed">
-            Join the ultimate fitness destination. State-of-the-art equipment, elite trainers, and a community that pushes you to be your best self.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-            <a href="#contact" className="bg-yellow-400 hover:bg-yellow-500 text-black px-8 py-3.5 rounded-md font-bold text-lg transition-all text-center uppercase tracking-wide shadow-sm">Start Your Journey</a>
-            <a href="#features" className="bg-white border border-neutral-200 hover:bg-neutral-50 text-black px-8 py-3.5 rounded-md font-bold text-lg transition-all text-center uppercase tracking-wide shadow-sm">Explore Classes</a>
+          
+          <div className="hidden lg:flex w-full h-full items-center justify-center relative">
+             <DotLottieReact
+                src="https://lottie.host/f7d4a574-6f2e-4685-b4f0-7109741cabce/lsxfGx23Tz.lottie"
+                loop
+                autoplay
+                className="w-full max-w-2xl"
+              />
           </div>
         </div>
       </section>
@@ -101,7 +136,7 @@ export default function Home() {
                   <h3 className="text-4xl font-black text-black mb-1 tracking-tighter">10+</h3>
                   <p className="text-neutral-500 text-sm font-semibold uppercase tracking-wide">Years Exp.</p>
                 </div>
-                <div className="bg-neutral-50 rounded-xl p-6 border border-neutral-200 shadow-sm translate-y-8">
+                <div className="bg-neutral-50 rounded-xl p-6 border border-neutral-200 shadow-sm">
                   <div className="text-yellow-500 mb-4"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
                   <h3 className="text-4xl font-black text-black mb-1 tracking-tighter">5K+</h3>
                   <p className="text-neutral-500 text-sm font-semibold uppercase tracking-wide">Members</p>
@@ -111,7 +146,7 @@ export default function Home() {
             <div>
               <h2 className="text-3xl md:text-5xl font-black text-black mb-6 uppercase tracking-tighter">Transform your life with our expertise</h2>
               <p className="text-neutral-500 mb-8 text-lg font-normal leading-relaxed">
-                At IRONFIT, we believe fitness is not a hobby; it'\''s a way of life. Founded in 2013, our facility has grown into a premier destination for those serious about their physical and mental well-being.
+                At IRONFIT, we believe fitness is not a hobby; it's a way of life. Founded in 2013, our facility has grown into a premier destination for those serious about their physical and mental well-being.
               </p>
               <ul className="space-y-4 mb-8">
                 {[
@@ -212,7 +247,7 @@ export default function Home() {
               <form onSubmit={handleSubmit} className="space-y-4">
                 {submitSuccess && (
                   <div className="bg-green-50 text-green-700 p-4 rounded-md border border-green-200 text-sm font-medium">
-                    Message sent successfully! We'\''ll get back to you soon.
+                    Message sent successfully! We'll get back to you soon.
                   </div>
                 )}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
