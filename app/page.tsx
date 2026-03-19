@@ -5,6 +5,22 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  const features = [
+    { title: 'Weightlifting', desc: 'Build pure strength and muscle mass with our expansive free weights and specialized lifting zones.', icon: <path d="M6 16.5V21M18 16.5V21M15.5 16.5l-7 1.341a1 1 0 0 1-1.182-.82v-.522a1 1 0 0 1 .818-.98l7-1.34a1 1 0 0 1 1.182.82v.52a1 1 0 0 1-.818.981ZM5 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm14 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM6 8v3M18 8v3M12 9v12M9 13h6"/> },
+    { title: 'Cardio Training', desc: 'Boost your endurance and heart health with top-tier treadmills, ellipticals, and rowers.', icon: <path d="M22 12h-4l-3 9L9 3l-3 9H2"/> },
+    { title: 'CrossFit', desc: 'High-intensity interval training designed to test your limits and improve overall fitness.', icon: <path d="M5.5 8.5 9 12l-3.5 3.5L2 12l3.5-3.5ZM12 2l3.5 3.5L12 9 8.5 5.5 12 2Zm6.5 6.5L22 12l-3.5 3.5L15 12l3.5-3.5ZM12 15l3.5 3.5L12 22l-3.5-3.5L12 15Z"/> },
+    { title: 'Yoga & Pilates', desc: 'Enhance flexibility, core strength, and mindfulness in our dedicated quiet studios.', icon: <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82zM7 7h.01"/> },
+    { title: 'Personal Training', desc: 'Get 1-on-1 guidance from elite coaches who create customized plans for your goals.', icon: <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm14 14v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/> },
+    { title: 'Nutrition Plans', desc: 'Fuel your progress with expert-crafted meal plans designed for recovery and growth.', icon: <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/> },
+  ];
+
+  const filteredFeatures = features.filter(feature => 
+    feature.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    feature.desc.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
     if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -96,6 +112,38 @@ export default function Home() {
           </nav>
 
           <div className="flex items-center gap-4 ml-auto md:ml-0">
+             
+             {/* Search Toggle */}
+             <div className="relative">
+              <button
+                onClick={() => setIsSearchOpen(!isSearchOpen)}
+                className="p-2 text-neutral-500 hover:text-black dark:text-neutral-400 dark:hover:text-white transition-colors flex items-center justify-center translate-y-[2px]"
+                aria-label="Toggle Search"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </button>
+              {isSearchOpen && (
+                <div className="absolute right-0 top-full mt-4 w-64 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg p-2 z-50">
+                  <input
+                    type="text"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-md bg-white dark:bg-neutral-700 text-sm text-black dark:text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                    placeholder="Search classes..."
+                    value={searchQuery}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      if (e.target.value) {
+                         const element = document.getElementById('features');
+                         if (element) {
+                            element.scrollIntoView({ behavior: 'smooth' });
+                         }
+                      }
+                    }}
+                    autoFocus
+                  />
+                </div>
+              )}
+             </div>
+
              <button 
               onClick={toggleDarkMode} 
               className="p-2 text-neutral-500 hover:text-black dark:text-neutral-400 dark:hover:text-white transition-colors"
@@ -219,14 +267,8 @@ export default function Home() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { title: 'Weightlifting', desc: 'Build pure strength and muscle mass with our expansive free weights and specialized lifting zones.', icon: <path d="M6 16.5V21M18 16.5V21M15.5 16.5l-7 1.341a1 1 0 0 1-1.182-.82v-.522a1 1 0 0 1 .818-.98l7-1.34a1 1 0 0 1 1.182.82v.52a1 1 0 0 1-.818.981ZM5 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm14 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM6 8v3M18 8v3M12 9v12M9 13h6"/> },
-              { title: 'Cardio Training', desc: 'Boost your endurance and heart health with top-tier treadmills, ellipticals, and rowers.', icon: <path d="M22 12h-4l-3 9L9 3l-3 9H2"/> },
-              { title: 'CrossFit', desc: 'High-intensity interval training designed to test your limits and improve overall fitness.', icon: <path d="M5.5 8.5 9 12l-3.5 3.5L2 12l3.5-3.5ZM12 2l3.5 3.5L12 9 8.5 5.5 12 2Zm6.5 6.5L22 12l-3.5 3.5L15 12l3.5-3.5ZM12 15l3.5 3.5L12 22l-3.5-3.5L12 15Z"/> },
-              { title: 'Yoga & Pilates', desc: 'Enhance flexibility, core strength, and mindfulness in our dedicated quiet studios.', icon: <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82zM7 7h.01"/> },
-              { title: 'Personal Training', desc: 'Get 1-on-1 guidance from elite coaches who create customized plans for your goals.', icon: <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm14 14v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/> },
-              { title: 'Nutrition Plans', desc: 'Fuel your progress with expert-crafted meal plans designed for recovery and growth.', icon: <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/> },
-            ].map((feature, i) => (
+            {filteredFeatures.length > 0 ? (
+              filteredFeatures.map((feature, i) => (
               <div key={i} className="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 p-8 rounded-xl shadow-sm hover:shadow-md transition-all group">
                 <div className="bg-neutral-50 dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 w-12 h-12 rounded-lg flex items-center justify-center mb-6 text-black dark:text-white group-hover:bg-yellow-400 group-hover:border-yellow-400 group-hover:text-black transition-colors">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -236,7 +278,18 @@ export default function Home() {
                 <h3 className="text-xl font-black text-black dark:text-white mb-2 uppercase tracking-tight transition-colors">{feature.title}</h3>
                 <p className="text-neutral-500 dark:text-neutral-400 font-normal leading-relaxed text-sm transition-colors">{feature.desc}</p>
               </div>
-            ))}
+            ))
+            ) : (
+              <div className="col-span-full text-center py-12">
+                <p className="text-neutral-500 dark:text-neutral-400 text-lg">No classes found matching "{searchQuery}".</p>
+                <button 
+                  onClick={() => setSearchQuery('')}
+                  className="mt-4 text-yellow-500 font-bold hover:underline"
+                >
+                  Clear Search
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -257,7 +310,7 @@ export default function Home() {
                   </div>
                   <div>
                     <h4 className="font-bold text-black dark:text-white mb-1 uppercase tracking-tight text-sm transition-colors">Location</h4>
-                    <p className="text-neutral-500 dark:text-neutral-400 font-normal text-sm transition-colors">123 Muscle Ave, Fitness City, FC 90210</p>
+                    <p className="text-neutral-500 dark:text-neutral-400 font-normal text-sm transition-colors">123, panadura rd, horana</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -266,7 +319,7 @@ export default function Home() {
                   </div>
                   <div>
                     <h4 className="font-bold text-black dark:text-white mb-1 uppercase tracking-tight text-sm transition-colors">Phone</h4>
-                    <p className="text-neutral-500 dark:text-neutral-400 font-normal text-sm transition-colors">+1 (555) 123-4567</p>
+                    <p className="text-neutral-500 dark:text-neutral-400 font-normal text-sm transition-colors">0342262123</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -275,7 +328,7 @@ export default function Home() {
                   </div>
                   <div>
                     <h4 className="font-bold text-black dark:text-white mb-1 uppercase tracking-tight text-sm transition-colors">Email</h4>
-                    <p className="text-neutral-500 dark:text-neutral-400 font-normal text-sm transition-colors">hello@ironfit.com</p>
+                    <p className="text-neutral-500 dark:text-neutral-400 font-normal text-sm transition-colors">hello@fitnesssport.com</p>
                   </div>
                 </div>
               </div>
@@ -353,8 +406,8 @@ export default function Home() {
       {/* Footer */}
       <footer className="py-8 bg-white dark:bg-neutral-950 border-t border-neutral-200 dark:border-neutral-800 text-center transition-colors duration-300">
         <div className="w-full px-4">
-          <div className="text-xl font-black text-black dark:text-white tracking-tighter mb-2 transition-colors">IRON<span className="text-yellow-500">FIT</span></div>
-          <p className="text-neutral-500 dark:text-neutral-400 text-xs font-medium transition-colors">© {new Date().getFullYear()} IronFit Fitness. All rights reserved.</p>
+          <div className="text-xl font-black text-black dark:text-white tracking-tighter mb-2 transition-colors">FITNESS<span className="text-yellow-500">SPORT</span></div>
+          <p className="text-neutral-500 dark:text-neutral-400 text-xs font-medium transition-colors">© {new Date().getFullYear()} FitnessSport Fitness. All rights reserved.</p>
         </div>
       </footer>
     </div>
