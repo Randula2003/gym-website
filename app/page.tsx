@@ -364,7 +364,6 @@ export default function Home() {
                       value={formData.firstName}
                       onChange={handleChange}
                       className={`w-full bg-white dark:bg-neutral-800 border ${errors.firstName ? 'border-red-500' : 'border-neutral-300 dark:border-neutral-700'} rounded-md px-3 py-2 text-sm text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors placeholder:text-neutral-400`} 
-                      placeholder="John" 
                     />
                     {errors.firstName && <p className="text-red-500 text-xs">{errors.firstName}</p>}
                   </div>
@@ -376,7 +375,6 @@ export default function Home() {
                       value={formData.lastName}
                       onChange={handleChange}
                       className={`w-full bg-white dark:bg-neutral-800 border ${errors.lastName ? 'border-red-500' : 'border-neutral-300 dark:border-neutral-700'} rounded-md px-3 py-2 text-sm text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors placeholder:text-neutral-400`} 
-                      placeholder="Doe" 
                     />
                     {errors.lastName && <p className="text-red-500 text-xs">{errors.lastName}</p>}
                   </div>
@@ -389,7 +387,6 @@ export default function Home() {
                     value={formData.email}
                     onChange={handleChange}
                     className={`w-full bg-white dark:bg-neutral-800 border ${errors.email ? 'border-red-500' : 'border-neutral-300 dark:border-neutral-700'} rounded-md px-3 py-2 text-sm text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors placeholder:text-neutral-400`} 
-                    placeholder="john@example.com" 
                   />
                   {errors.email && <p className="text-red-500 text-xs">{errors.email}</p>}
                 </div>
@@ -401,7 +398,6 @@ export default function Home() {
                     value={formData.message}
                     onChange={handleChange}
                     className={`w-full bg-white dark:bg-neutral-800 border ${errors.message ? 'border-red-500' : 'border-neutral-300 dark:border-neutral-700'} rounded-md px-3 py-2 text-sm text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors resize-none placeholder:text-neutral-400`} 
-                    placeholder="How can we help you?"
                   ></textarea>
                   {errors.message && <p className="text-red-500 text-xs">{errors.message}</p>}
                 </div>
