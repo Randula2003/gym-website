@@ -67,28 +67,27 @@ This project includes a clean UI, reusable components, and a functional contact 
 ## 📁 Project Structure
 
 gym-website/
-│
-├── app/                         # Next.js App Router structure
-│   ├── api/
-│   │   └── contact/             # Contact form API route (POST handler)
-│   │
-│   ├── layout.tsx               # Global layout wrapper
-│   ├── page.tsx                 # Landing page (Home)
-│   ├── globals.css              # Global styles (Tailwind CSS)
-│   └── favicon.ico
-│
-├── public/                      # Static assets (images, icons)
-│
-├── next.config.ts               # Next.js configuration
-├── tsconfig.json                # TypeScript configuration
-├── postcss.config.mjs           # Tailwind/PostCSS config
-├── eslint.config.mjs            # Linting rules
-│
-├── package.json                 # Scripts & dependencies
-├── package-lock.json
-├── .gitignore
-│
-└── README.md                    # Project documentation
+
+app/
+api/
+contact/                    (Contact form API route)
+layout.tsx                  (Global layout wrapper)
+page.tsx                    (Home page)
+globals.css                 (Global styles)
+favicon.ico
+
+public/                     (Static assets like images and icons)
+
+next.config.ts              (Next.js config)
+tsconfig.json               (TypeScript config)
+postcss.config.mjs          (Tailwind config)
+eslint.config.mjs           (Linting config)
+
+package.json                (Dependencies and scripts)
+package-lock.json
+.gitignore
+
+README.md                   (Project documentation)
 ---
 
 ## ✨ Author
