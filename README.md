@@ -60,7 +60,7 @@ This project includes a clean UI, reusable components, and a functional contact 
 
 ## 🌐 Live Demo
 
-👉 https://vercel.com/randula2003s-projects/gym-website/EiMtJbcCjvyr26LxVX8LmoDWFS8W
+👉 https://gym-website-rust-six.vercel.app/
 
 ---
 
